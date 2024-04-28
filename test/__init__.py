@@ -1,3 +1,4 @@
 __all__ = [
-    "node"
+    "node",
+    "logical_formula"
 ]

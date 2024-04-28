@@ -1,0 +1,42 @@
+import unittest
+
+from src.logical_formula.logical_formula import LogicalFormula
+from src.node.nonconstant.variable_node import VariableNode as Variable
+from src.node.nonconstant.operations import *
+from src.node.constant import TrueNode, FalseNode
+
+
+class TestLogicalFormula(unittest.TestCase):
+    def setUp(self):
+        self.var_a = Variable(TrueNode.VALUE)
+        self.var_b = Variable(is_negative=True)
+        self.var_c = Variable()
+        self.root = ConjunctionNode()
+        self.root.left = self.var_a
+        self.disjunction = DisjunctionNode()
+        self.root.right = self.disjunction
+        self.disjunction.left = self.var_b
+        self.disjunction.right = self.var_c
+        self.formula = LogicalFormula(self.root)
+
+    def test_init(self):
+        self.assertIn(self.var_a, self.formula.variables)
+        self.assertIn(self.var_b, self.formula.variables)
+        self.assertIn(self.var_c, self.formula.variables)
+
+    def test_value(self):
+        self.assertEqual(self.formula.value, TrueNode.VALUE)
+
+    def test_fix_variable(self):
+        self.formula.fix_variable(self.var_b, FalseNode())
+        self.assertEqual(self.disjunction.left, FalseNode())
+        self.assertNotIn(self.var_b, self.formula.variables)
+        self.assertEqual(self.formula.value, FalseNode.VALUE)
+
+        self.formula.fix_variable(self.var_c, TrueNode())
+        self.assertEqual(self.disjunction.right, TrueNode())
+        self.assertNotIn(self.var_c, self.formula.variables)
+        self.assertEqual(self.formula.value, TrueNode.VALUE)
+
+        self.assertRaises(KeyError, self.formula.fix_variable, Variable(), TrueNode())
+
