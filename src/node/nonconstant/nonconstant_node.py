@@ -42,8 +42,8 @@ class NonConstantNode(Node, ABC):
 
 
 class OperationNode(NonConstantNode, ABC):
-    def __init__(self, value=NonConstantNode.DEFAULT_VALUE):
-        super().__init__(value)
+    def __init__(self, value=NonConstantNode.DEFAULT_VALUE, *, is_negative=False):
+        super().__init__(value, is_negative=is_negative)
         self._right: Node | None = None
         self._left: Node | None = None
 
