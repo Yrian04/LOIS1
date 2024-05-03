@@ -20,6 +20,10 @@ class NonConstantNode(Node, ABC):
     def parents(self):
         return self._parents.copy()
 
+    @property
+    def is_negative(self):
+        return self._is_negative
+
     def negate(self):
         self._is_negative = not self._is_negative
         self._on_value_changed()
