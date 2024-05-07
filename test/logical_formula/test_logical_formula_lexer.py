@@ -9,7 +9,7 @@ class TestLogicalFormulaLexer(unittest.TestCase):
         self.lexer = LogicalFormulaLexer()
 
     def test_analyze(self):
-        tokens = self.lexer.analyze(r"((!(A/\B))\/((0->D)~1))")
+        tokens = self.lexer.analyze(r"((!(A/\B))\/((0->B)~1))")
         self.assertEqual(tokens, [
             Token.left_bracket,
             Token.left_bracket,
@@ -25,7 +25,7 @@ class TestLogicalFormulaLexer(unittest.TestCase):
             Token.left_bracket,
             Token.false,
             Token.implication,
-            'D',
+            'B',
             Token.right_bracket,
             Token.equivalence,
             Token.true,
