@@ -1,7 +1,15 @@
-import unittest
-import os
+# Выполнили студенты группы 221701 БГУИР:
+# - Глёза Егор Дмитриевич
+# - Крупский Артём Викторович
+#
+# Класс для хранения тестов, относящихся к классу узлов конъюнкций
+# 08.05.2024
+#
+# Источники:
+# - Проектирование программного обеспечения интеллектуальных систем (3 семестр)
+#
 
-os.system("pwd")
+import unittest
 
 from src.node.nonconstant.operations import ConjunctionNode
 from src.node.constant import TrueNode, FalseNode

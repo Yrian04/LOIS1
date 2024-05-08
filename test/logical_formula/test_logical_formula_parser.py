@@ -35,22 +35,17 @@ class TestLogicalFormulaParser(unittest.TestCase):
             Token.right_bracket,
         ])
         self.assertIsInstance(root, operations.DisjunctionNode)
-        self.assertFalse(root.is_negative)
 
-        self.assertIsInstance(root.left, operations.ConjunctionNode)
-        self.assertTrue(root.left.is_negative)
+        self.assertIsInstance(root.left, operations.NegationNode)
 
-        self.assertIsInstance(root.left.left, Variable)
-        self.assertFalse(root.left.left.is_negative)
+        self.assertIsInstance(root.left.negated_node, operations.ConjunctionNode)
 
-        self.assertIsInstance(var_b := root.left.right, Variable)
-        self.assertFalse(var_b.is_negative)
+        self.assertIsInstance(root.left.negated_node.left, Variable)
+        self.assertIsInstance(var_b := root.left.negated_node.right, Variable)
 
         self.assertIsInstance(root.right, operations.EquivalenceNode)
-        self.assertFalse(root.right.is_negative)
 
         self.assertIsInstance(root.right.left, operations.ImplicationNode)
-        self.assertFalse(root.right.left.is_negative)
 
         self.assertIs(root.right.left.left, FalseNode())
 

@@ -2,17 +2,19 @@
 # - Глёза Егор Дмитриевич
 # - Крупский Артём Викторович
 #
-# Класс узла для дизъюнкции
+# Основной файл программы
 # 08.05.2024
 #
 # Источники:
 # - Проектирование программного обеспечения интеллектуальных систем (3 семестр)
 #
 
-from .binary_operation import BinaryOperation
+import src.logical_formula as lf
 
 
-class DisjunctionNode(BinaryOperation):
-    def _operation(self, right_value: BinaryOperation.value_type,
-                   left_value: BinaryOperation.value_type) -> BinaryOperation.value_type:
-        return right_value | left_value
+string = input("Enter formula: ")
+f = lf.get_logical_formula_from_string(string)
+if lf.is_formula_impossible(f):
+    print("Formula is impossible")
+else:
+    print("Formula is possible")
