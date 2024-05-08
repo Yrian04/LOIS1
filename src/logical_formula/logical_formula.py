@@ -1,6 +1,17 @@
+# Выполнили студенты группы 221701 БГУИР:
+# - Глёза Егор Дмитриевич
+# - Крупский Артём Викторович
+#
+# Класс логической формулы
+# 08.05.2024
+#
+# Источники:
+# - Проектирование программного обеспечения интеллектуальных систем (3 семестр)
+#
+
 from ..node import Node
 from ..node.nonconstant.variable_node import VariableNode as Variable
-from ..node.nonconstant.nonconstant_node import OperationNode as Operation
+from ..node.nonconstant.operations import BinaryOperation, NegationNode as Negation
 from ..node.constant import ConstantNode as Constant
 
 
@@ -16,10 +27,13 @@ class LogicalFormula:
             node = stack.pop()
             match node:
                 case Variable():
-                    self._vars.append(node)
-                case Operation():
+                    if node not in self._vars:
+                        self._vars.append(node)
+                case BinaryOperation():
                     stack.append(node.left)
                     stack.append(node.right)
+                case Negation():
+                    stack.append(node.negated_node)
                 case None:
                     continue
 
@@ -37,7 +51,11 @@ class LogicalFormula:
         self._vars.remove(variable)
 
         for parent in variable.parents:
-            if parent.left is variable:
-                parent.left = value
-            if parent.right is variable:
-                parent.right = value
+            match parent:
+                case BinaryOperation():
+                    if parent.left is variable:
+                        parent.left = value
+                    if parent.right is variable:
+                        parent.right = value
+                case Negation():
+                    parent.negated_node = value

@@ -1,3 +1,14 @@
+# Выполнили студенты группы 221701 БГУИР:
+# - Глёза Егор Дмитриевич
+# - Крупский Артём Викторович
+#
+# Класс парсера логических выражений
+# 08.05.2024
+#
+# Источники:
+# - Проектирование программного обеспечения интеллектуальных систем (3 семестр)
+#
+
 from ..node import Node
 from ..node.nonconstant import operations
 from ..node.nonconstant.variable_node import VariableNode as Variable
@@ -24,35 +35,35 @@ class LogicalFormulaParser:
 
     __vars = {}
 
-    def parse(self, tokens: list[Token], var_name_validator=standard_validator) -> Node:
-        self.__vars = {}
+    def __init__(self, var_name_validator=standard_validator):
         self._var_name_validator = var_name_validator
+
+    def parse(self, tokens: list[Token]) -> Node:
+        self.__vars = {}
         return self._build_tree(tokens)
 
     def _build_tree(self, tokens: list[Token]) -> Node:
-        is_negative = False
-
         match tokens:
             case (Token.left_bracket,
                   Token.negation,
                   *subformula,
                   Token.right_bracket):
-                is_negative = True
-                tokens = subformula
-
-        match tokens:
-            case str() as var:
+                negation = operations.NegationNode()
+                negation.negated_node = self._build_tree(subformula)
+                return negation
+            case [str()] as var_list:
+                var = var_list[0]
                 if self._var_name_validator(var) not in self.__vars:
-                    self.__vars[var] = Variable(is_negative)
+                    self.__vars[var] = Variable()
                 return self.__vars[var]
-            case Token.false:
+            case [Token.false]:
                 return FalseNode()
-            case Token.true:
+            case [Token.true]:
                 return TrueNode()
 
         left_subformula, operation, right_subformula = self.__pick_out_binary_relation(tokens)
 
-        root = self.operations_types[operation](is_negative=is_negative)
+        root = self.operations_types[operation]()
         root.left = self._build_tree(left_subformula)
         root.right = self._build_tree(right_subformula)
 
@@ -72,7 +83,7 @@ class LogicalFormulaParser:
                   Token.implication as operation,
                   str() | Token.false | Token.true as arg2,
                   Token.right_bracket):
-                return arg1, operation, arg2
+                return [arg1], operation, [arg2]
 
             case (Token.left_bracket,
                   *subformula,
@@ -82,7 +93,7 @@ class LogicalFormulaParser:
                   Token.implication as operation,
                   str() | Token.false | Token.true as arg2,
                   Token.right_bracket):
-                return subformula, operation, arg2
+                return subformula, operation, [arg2]
 
             case (Token.left_bracket,
                   str() | Token.false | Token.true as arg1,
@@ -92,7 +103,7 @@ class LogicalFormulaParser:
                   Token.implication as operation,
                   *subformula,
                   Token.right_bracket):
-                return arg1, operation, subformula
+                return [arg1], operation, subformula
 
         brackets = 0
 

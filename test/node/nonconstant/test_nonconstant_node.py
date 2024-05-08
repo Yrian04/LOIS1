@@ -1,3 +1,14 @@
+# Выполнили студенты группы 221701 БГУИР:
+# - Глёза Егор Дмитриевич
+# - Крупский Артём Викторович
+#
+# Класс для хранения тестов, относящихся к классу неконстантных узлов
+# 08.05.2024
+#
+# Источники:
+# - Проектирование программного обеспечения интеллектуальных систем (3 семестр)
+#
+
 import unittest
 
 from src.node.nonconstant.variable_node import VariableNode
@@ -15,10 +26,6 @@ class TestNonConstantNode(unittest.TestCase):
 
     def test_update_value(self):
         self.var_b.value = TrueNode.VALUE
-        self.assertEqual(self.conjunction.value, TrueNode.VALUE)
-
-    def test_negation(self):
-        self.var_b.negate()
         self.assertEqual(self.conjunction.value, TrueNode.VALUE)
 
     def test_change_child(self):
