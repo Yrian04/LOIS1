@@ -18,7 +18,7 @@ from ..node.constant import ConstantNode as Constant
 class LogicalFormula:
     value_type = Node.value_type
 
-    def __init__(self, root: Node | None = None):
+    def __init__(self, root: Node):
         self._root = root
         self._vars: list[Variable] = []
 
@@ -34,8 +34,6 @@ class LogicalFormula:
                     stack.append(node.right)
                 case Negation():
                     stack.append(node.negated_node)
-                case None:
-                    continue
 
     @property
     def value(self) -> value_type:
@@ -44,18 +42,3 @@ class LogicalFormula:
     @property
     def variables(self) -> list[Variable]:
         return self._vars.copy()
-
-    def fix_variable(self, variable: Variable, value: Constant) -> None:
-        if variable not in self._vars:
-            raise KeyError(self)
-        self._vars.remove(variable)
-
-        for parent in variable.parents:
-            match parent:
-                case BinaryOperation():
-                    if parent.left is variable:
-                        parent.left = value
-                    if parent.right is variable:
-                        parent.right = value
-                case Negation():
-                    parent.negated_node = value

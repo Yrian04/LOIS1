@@ -29,16 +29,3 @@ class TestLogicalFormula(unittest.TestCase):
     def test_value(self):
         self.assertEqual(self.formula.value, TrueNode.VALUE)
 
-    def test_fix_variable(self):
-        self.formula.fix_variable(self.var_b, TrueNode())
-        self.assertEqual(self.negation.negated_node, TrueNode())
-        self.assertNotIn(self.var_b, self.formula.variables)
-        self.assertEqual(self.formula.value, FalseNode.VALUE)
-
-        self.formula.fix_variable(self.var_c, TrueNode())
-        self.assertEqual(self.negation.negated_node, TrueNode())
-        self.assertNotIn(self.var_c, self.formula.variables)
-        self.assertEqual(self.formula.value, TrueNode.VALUE)
-
-        self.assertRaises(KeyError, self.formula.fix_variable, Variable(), TrueNode())
-
