@@ -36,3 +36,4 @@ class NegationNode(OperationNode):
 
     def calculate_value(self) -> None:
         self._value = not self._negated_node.value
+        self._on_value_changed()
