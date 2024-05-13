@@ -17,3 +17,7 @@ class VariableNode(NonConstantNode):
     def value(self, value: NonConstantNode.value_type):
         self._value = value
         self._on_value_changed()
+
+    def negate_value(self):
+        self._value = not self._value
+        self._on_value_changed()

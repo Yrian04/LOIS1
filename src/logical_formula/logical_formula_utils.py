@@ -36,7 +36,7 @@ def is_formula_impossible(formula: LogicalFormula) -> bool:
     prev_grey = 0
     for i in range(1, 2 ** len(formula.variables)):
         var_index = int(math.log2(prev_grey ^ (prev_grey := to_gray(i)))) - 1
-        formula.variables[var_index].value = not formula.variables[var_index].value
+        formula.variables[var_index].negate_value()
         if formula.value:
             return False
 
